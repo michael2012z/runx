@@ -2,6 +2,8 @@
 
 workpath=/usr/share/runX
 
+echo "create $1 $2 $3" >> /var/log/runX.log
+
 containerid="$1"
 crundir="$2"
 bundle=$( cat "$crundir"/bundle )
@@ -95,8 +97,13 @@ then
     cat "$xlconf" >> $outconfig
 fi
 
+echo "create: mountpoint: $(ls -l $mountpoint)" >> /var/log/runX.log
+
 echo $cmdline > $mountpoint/cmdline
 xl create -p $outconfig > /dev/null 2>&1
 
 pid=$( ps -elf | grep -v grep | grep "xl create -p $outconfig" | awk '{print $1}' )
 echo -n "$pid" > "$pidfile"
+
+echo "pid = $pid, pidfile: $pidfile" >> /var/log/runX.log
+echo "outconfig = $outconfig" >> /var/log/runX.log

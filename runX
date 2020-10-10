@@ -3,6 +3,9 @@
 workpath=/usr/share/runX
 rundir=/run/runX
 
+echo "run X +++++++++++++++++++++++++++" >> /var/log/runX.log
+echo "runX $1 $2" >> /var/log/runX.log
+
 guestconsole=""
 cmd=""
 root=""
@@ -114,21 +117,27 @@ elif test $cmd = "create"
 then
     $workpath/create $containerid "$crundir"
 
+    echo "runX guestconsole = $guestconsole" >> /var/log/runX.log
+
     if test "$guestconsole"
     then
+	echo "runX guestconsole flag 0" >> /var/log/runX.log
         daemonize $workpath/serial_start \
           "$containerid" \
           "$crundir"/console_pty
         for n in 10 9 8 7 6 5 4 3 2 1; do
             if [ ! -L "$crundir"/console_pty ]; then
+	      echo "runX sleeping 1s" >> /var/log/runX.log
               sleep .1
             else
               break
             fi;
         done
+	echo "runX guestconsole flag 1" >> /var/log/runX.log
         daemonize $workpath/serial_fd_handler \
           "$guestconsole" \
           "$crundir"/console_pty
+	echo "runX guestconsole flag 2" >> /var/log/runX.log
     else
          echo "connect to container console with 'xl console $containerid'"
     fi
@@ -138,3 +147,5 @@ then
 else
     :
 fi
+
+echo "runX ------------------------ " >> /var/log/runX.log

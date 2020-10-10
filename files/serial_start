@@ -3,8 +3,16 @@
 containerid=$1
 dev_containerd=$2
 
+echo "serial_start: containerid = $containerid, dev_containerd = $dev_containerd" >> /var/log/runX.log
+
 domid=`xl list $containerid | tail -n 1 | awk '{print $2}'`
+
+echo "serial_start: domid = $domid" >> /var/log/runX.log
+
 dev_xen=$(xenstore-read /local/domain/${domid}/console/tty)
+
+echo "serial_start: dev_xen = $dev_xen" >> /var/log/runX.log
+
 socat \
 	PTY,link=${dev_containerd},rawer \
 	${dev_xen},rawer

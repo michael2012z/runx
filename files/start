@@ -2,6 +2,10 @@
 
 workpath=/usr/share/runX
 
+echo "starting $1" >> /var/log/runX.log
+
 containerid="$1"
 
 xl unpause "$1"
+
+echo "unpaused $1" >> /var/log/runX.log

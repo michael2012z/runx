@@ -9,7 +9,6 @@ initrd=$outpath/initrd
 init="$base"/init-initrd
 rm -rf $tmpdir
 
-
 if test -z "$busybox"
 then
     busybox_version=1.32.0
@@ -47,6 +46,9 @@ mkdir -p $tmpdir/sys
 mkdir -p $tmpdir/lib
 mkdir -p $tmpdir/var
 mkdir -p $tmpdir/mnt
+
+echo "***************** busybox = $busybox"
+
 cp "$busybox" $tmpdir/bin/busybox
 for i in `cat "$base"/applet-list`
 do
