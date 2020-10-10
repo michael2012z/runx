@@ -33,7 +33,7 @@ then
     fi
     cd $builddir/$busybox_name
     cp $busybox_src_config .config
-    make -j "$(getconf _NPROCESSORS_ONLN)"
+    LDFLAGS="--static" make -j "$(getconf _NPROCESSORS_ONLN)"
     export busybox="$busybox_image"
 fi
 
@@ -50,7 +50,7 @@ mkdir -p $tmpdir/mnt
 cp "$busybox" $tmpdir/bin/busybox
 for i in `cat "$base"/applet-list`
 do
-    ln -s /bin/busybox $tmpdir/bin/$i
+    ln -s $tmpdir/bin/busybox $tmpdir/bin/$i
 done
 
 mkdir -p $tmpdir/etc/init.d
